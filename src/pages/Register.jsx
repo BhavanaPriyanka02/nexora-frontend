@@ -11,13 +11,18 @@ const Register = () => {
   const [password, setPassword] = useState("");
 
   const handleRegister = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      await api.post("/auth/register", {
-        email,
-        password
-      });
+  console.log("EMAIL:", email);
+  console.log("PASSWORD:", password);
+  console.log("TYPE:", typeof password);
+  console.log("LENGTH:", password.length);
+
+  await api.post("/auth/register", {
+    email,
+    password
+  });
+};
 
       <toast className="success"></toast>("Registration successful! Please login.");
       navigate("/login");
