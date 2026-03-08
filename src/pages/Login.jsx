@@ -22,18 +22,19 @@ const Login = () => {
       // Save token
       localStorage.setItem("token", token);
 
-      // Decode role from JWT
+      // Decode JWT payload
       const payload = JSON.parse(atob(token.split(".")[1]));
       const role = payload.role;
 
+      // Save role
       localStorage.setItem("role", role);
 
-      // 🔥 IMPORTANT: trigger re-render in App.jsx
+      // Trigger UI re-render (for navbar/admin links)
       window.dispatchEvent(new Event("storage"));
 
       toast.success("Login successful");
 
-      // Navigate AFTER storage update
+      // Redirect based on role
       if (role === "admin") {
         navigate("/admin");
       } else {
@@ -41,6 +42,7 @@ const Login = () => {
       }
 
     } catch (err) {
+      console.error(err);
       toast.error("Invalid credentials");
     }
   };
