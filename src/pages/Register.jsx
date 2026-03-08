@@ -11,25 +11,26 @@ const Register = () => {
   const [password, setPassword] = useState("");
 
   const handleRegister = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  console.log("EMAIL:", email);
-  console.log("PASSWORD:", password);
-  console.log("TYPE:", typeof password);
-  console.log("LENGTH:", password.length);
+    try {
+      await api.post("/auth/register", {
+        email,
+        password
+      });
 
-  await api.post("/auth/register", {
-    email,
-    password
-  });
-};
+      toast.success("Registration successful! Please login.");
 
-      <toast className="success"></toast>("Registration successful! Please login.");
       navigate("/login");
 
     } catch (error) {
       console.error(error);
-      toast.error("Registration failed");
+
+      if (error.response?.data?.detail) {
+        toast.error(error.response.data.detail);
+      } else {
+        toast.error("Registration failed");
+      }
     }
   };
 
@@ -38,13 +39,19 @@ const Register = () => {
       <h2>Create Account</h2>
 
       <form onSubmit={handleRegister} style={{ marginTop: "20px" }}>
+        
         <input
           type="email"
           placeholder="Enter Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          style={{ display: "block", marginBottom: "15px", padding: "10px", width: "250px" }}
+          style={{
+            display: "block",
+            marginBottom: "15px",
+            padding: "10px",
+            width: "250px"
+          }}
         />
 
         <input
@@ -53,7 +60,12 @@ const Register = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          style={{ display: "block", marginBottom: "15px", padding: "10px", width: "250px" }}
+          style={{
+            display: "block",
+            marginBottom: "15px",
+            padding: "10px",
+            width: "250px"
+          }}
         />
 
         <button
@@ -68,6 +80,7 @@ const Register = () => {
         >
           Register
         </button>
+
       </form>
     </div>
   );
