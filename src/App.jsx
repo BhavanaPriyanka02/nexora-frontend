@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Navbar from "./components/Navbar";
 import Products from "./pages/Products";
@@ -12,6 +12,7 @@ import AdminProducts from "./pages/AdminProducts";
 import Register from "./pages/Register";
 
 function App() {
+
   const [cartCount, setCartCount] = useState(0);
   const [role, setRole] = useState(localStorage.getItem("role"));
   const [token, setToken] = useState(localStorage.getItem("token"));
@@ -23,7 +24,7 @@ function App() {
     setCartCount(total);
   }, []);
 
-  // Listen for localStorage updates (login/logout)
+  // Listen for login/logout updates
   useEffect(() => {
     const handleStorageChange = () => {
       setRole(localStorage.getItem("role"));
@@ -57,49 +58,46 @@ function App() {
           padding: "24px"
         }}
       >
+
         <Routes>
+
           <Route
             path="/"
             element={<Products setCartCount={setCartCount} />}
           />
-          <Route path="/login" element={<Login />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/register" element={<Register />} />
 
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/cart" element={<Cart />} />
+
+          {/* USER ORDERS */}
           <Route
             path="/orders"
             element={
-              token ? <OrderHistory /> : <h1>Please Login First</h1>
+              token ? <OrderHistory /> : <Navigate to="/login" />
             }
           />
 
-          <Route path="/admin" element={<Admin />}>
-            <Route
-              index
-              element={
-                role === "admin"
-                  ? <AdminOrders />
-                  : <h1>Access Denied</h1>
-              }
-            />
-            <Route
-              path="orders"
-              element={
-                role === "admin"
-                  ? <AdminOrders />
-                  : <h1>Access Denied</h1>
-              }
-            />
-            <Route
-              path="products"
-              element={
-                role === "admin"
-                  ? <AdminProducts />
-                  : <h1>Access Denied</h1>
-              }
-            />
+          {/* ADMIN ROUTES */}
+          <Route
+            path="/admin/*"
+            element={
+              role === "admin"
+                ? <Admin />
+                : <Navigate to="/" />
+            }
+          >
+
+            <Route index element={<AdminOrders />} />
+
+            <Route path="orders" element={<AdminOrders />} />
+
+            <Route path="products" element={<AdminProducts />} />
+
           </Route>
+
         </Routes>
+
       </div>
     </div>
   );
