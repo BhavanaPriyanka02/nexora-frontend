@@ -13,7 +13,7 @@ const Products = ({ setCartCount }) => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await api.get("/products");
+      const res = await api.get("/products?limit=100");
 
       // 🔥 IMPORTANT FIX
       const productData =
