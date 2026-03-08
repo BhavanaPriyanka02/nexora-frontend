@@ -61,15 +61,21 @@ const Products = ({ setCartCount }) => {
 };
 
   const filteredProducts = products.filter((product) => {
-    const matchesCategory =
-      selectedCategory === "all" ||
-      product.category?.toLowerCase() === selectedCategory.toLowerCase();
 
-    const matchesSearch =
-      product.name?.toLowerCase().includes(searchTerm.toLowerCase());
+  const category = product.category?.trim().toLowerCase() || "";
+  const selected = selectedCategory?.trim().toLowerCase() || "";
 
-    return matchesCategory && matchesSearch;
-  });
+  const name = product.name?.trim().toLowerCase() || "";
+  const search = searchTerm?.trim().toLowerCase() || "";
+
+  const matchesCategory =
+    selected === "all" || category === selected;
+
+  const matchesSearch =
+    name.includes(search);
+
+  return matchesCategory && matchesSearch;
+});
 
   return (
   <div>
