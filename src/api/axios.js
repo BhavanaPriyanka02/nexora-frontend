@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://nexora-backend-p2b0.onrender.com/"
+  baseURL: "https://nexora-backend-p2b0.onrender.com"
 });
 
 api.interceptors.request.use((config) => {
