@@ -21,7 +21,7 @@ const AdminProducts = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const res = await api.get("/products");
+      const res = await api.get("/products?limit=100");
       setProducts(res.data.data.items);
     } catch (err) {
       console.error(err);
