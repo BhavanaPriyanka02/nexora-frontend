@@ -8,13 +8,13 @@ const Cart = () => {
     return stored ? JSON.parse(stored) : [];
   });
 
-  // Keep localStorage synced
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(items));
   }, [items]);
 
  const handleCheckout = async () => {
   try {
+
     const orderData = {
       idempotency_key: Date.now().toString(),
       items: items.map(item => ({
@@ -26,19 +26,25 @@ const Cart = () => {
     const response = await api.post("/orders/create", orderData);
 
     if (response.data.success) {
+
       toast.success(response.data.message);
 
       setItems([]);
       localStorage.removeItem("cart");
+
+      setTimeout(() => {
+        window.location.href = "/orders";
+      }, 1200);
+
     }
 
   } catch (error) {
+
     console.error("Checkout failed", error);
     toast.error("Checkout failed");
+
   }
 };
-
-
 
   const removeItem = (id) => {
     setItems(items.filter((item) => item.id !== id));
